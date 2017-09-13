@@ -21,21 +21,20 @@ function initialize(){
 
   scene = new THREE.Scene();
 
-  camera = new THREE.PerspectiveCamera(90, width / height, 1, 200);
+  camera = new THREE.PerspectiveCamera(80, width / height, 1, 200);
   camera.lookAt(scene.position);
-  camera.position.z = 150;
+  camera.position.z = 100;
 
-  renderer = new THREE.WebGLRenderer();
+  renderer = new THREE.WebGLRenderer({alpha: true, antialias:true});
   renderer.setSize(width, height);
-  renderer.setClearColor(0x0E2255);
 
   document.getElementById('canvas').appendChild(renderer.domElement);
 
   window.addEventListener('resize', onResize);
-  
+
 
   drawPlanet();
-  drawParticle(350);
+  drawParticle(500);
   createLight();
 }
 
@@ -81,14 +80,15 @@ function drawPlanet(){
   heartShape.bezierCurveTo( x + 7, y, x + 5, y + 5, x + 5, y + 5 );
 
   // use extrude to make the 2d heartShape 3d
-  var extrudeSettings = { amount: 2, bevelEnabled: true, bevelSegments: 4, steps: 15, bevelSize: 4, bevelThickness: 3 };
+  var extrudeSettings = { amount: 2, bevelEnabled: true, bevelSegments: 4, steps: 15, bevelSize: 5, bevelThickness: 5 };
 
   var planetGeometry = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
 
-  planetGeometry.scale(1.5, 1.5, 1,5);
+  planetGeometry.scale(2.5, 2.5, 2.5);
   // object with phong shading
   var planetMaterial = new THREE.MeshPhongMaterial({
-      color: "rgb(128, 223, 255)"
+      color: "rgb(128, 223, 255)",
+      
     });
   var p = new THREE.Mesh(planetGeometry, planetMaterial);
 
@@ -103,7 +103,7 @@ function drawPlanet(){
   // TorusGeometry(radius, tube, radialSegments, tubularSegments, arc)
   var ringGeometry = new THREE.TorusGeometry(50, 2, 4, 16);
 
-  var ringMaterial = new THREE.MeshPhongMaterial({
+  var ringMaterial = new THREE.MeshToonMaterial({
     color: "rgb(242, 174, 84)",
     // use falt shading
     shading: THREE.FlatShading
@@ -137,10 +137,10 @@ function drawParticle(num){
   scene.add(particles);
 
   for(var i = 0; i < num; i ++){
-    var geometry = new THREE.SphereGeometry(3, 8, 8);
+    var geometry = new THREE.SphereGeometry(3, 4, 4);
 
     // set random size
-    var scaleFactor = Math.random() ;
+    var scaleFactor = Math.random()/2;
 
     geometry.scale(
       scaleFactor,
@@ -162,7 +162,7 @@ function drawParticle(num){
     particle.position.set(
       200 * (Math.random() - 0.5),
       200 * (Math.random() - 0.5),
-      200 * (Math.random() - 0.5),
+      200 * (Math.random() - 0.5)
     );
 
 
@@ -171,14 +171,16 @@ function drawParticle(num){
   }
 }
 
+
 function render(){
 
   requestAnimationFrame(render);
 
-  planet.rotation.y += degToRad(1);
+  planet.rotation.y += degToRad(0.5);
 
-  particles.rotation.y += degToRad(0.05);
+  particles.rotation.y += degToRad(0.1);
   particles.rotation.x += degToRad(0.1);
+  particles.rotation.z += degToRad(0.05);
   //planet.rotation.z += 0.03;
   renderer.render(scene, camera);
 }
