@@ -25,7 +25,7 @@ function initialize(){
   camera.lookAt(scene.position);
   camera.position.z = 150;
 
-  renderer = new THREE.WebGLRenderer();
+  renderer = new THREE.WebGLRenderer({alpha: true, antialias:true}); // enable anti alias
   renderer.setSize(width, height);
   renderer.setClearColor(0x0E2255);
 
@@ -81,7 +81,7 @@ function drawPlanet(){
   heartShape.bezierCurveTo( x + 7, y, x + 5, y + 5, x + 5, y + 5 );
 
   // use extrude to make the 2d heartShape 3d
-  var extrudeSettings = { amount: 2, bevelEnabled: true, bevelSegments: 4, steps: 15, bevelSize: 4, bevelThickness: 3 };
+  var extrudeSettings = { amount: 2, bevelEnabled: true, bevelSegments: 4, steps: 15, bevelSize: 5, bevelThickness: 5 };
 
   var planetGeometry = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
 
